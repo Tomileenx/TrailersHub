@@ -43,3 +43,19 @@ Tech Stack
 - WebClient (for TMDB API calls)
 - Scheduled Tasks (@Scheduled)
 - Lombok
+
+com.example.Trailers
+├── admin
+├── auth
+├── config
+├── exception
+├── integration
+├── jwt
+├── profile
+├── roles
+├── trailers
+├── user
+└── TrailersApplication
+
+License
+-This project is for educational and portfolio purposes.
