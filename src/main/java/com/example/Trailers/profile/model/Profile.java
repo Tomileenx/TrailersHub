@@ -30,13 +30,7 @@ public class Profile {
     @Column(name = "genre")
     private Set<String> favouriteGenres;
 
-    @ElementCollection
-    @CollectionTable(
-            name = "user_favourite_franchises",
-            joinColumns = @JoinColumn(name = "user_profile_id")
-    )
-    @Column(name = "franchise")
-    private Set<String> favouriteFranchises;
+   private String language;
 
     @OneToOne(
             fetch = FetchType.LAZY,

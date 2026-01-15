@@ -1,5 +1,7 @@
-package com.example.Trailers.admin;
+package com.example.Trailers.admin.controller;
 
+import com.example.Trailers.admin.dto.AdminResponse;
+import com.example.Trailers.admin.service.AdminService;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;

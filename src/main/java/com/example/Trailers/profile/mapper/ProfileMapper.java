@@ -7,15 +7,23 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class ProfileMapper {
+    public String mapProfileLanguageToTmdb(String profileLang) {
+        return switch(profileLang.toLowerCase()) {
+            case "english", "en" -> "en-US";
+            case "french", "fr" -> "fr-FR";
+            case "spanish", "es" -> "es-ES";
+            default -> "en-US"; // fallback
+        };
+    }
+
     public Profile toProfile(ProfileRequest request) {
         Profile profile = new Profile();
         profile.setUsername(request.username());
         profile.setFavouriteGenres(request.favouriteGenres());
-        profile.setFavouriteFranchises(request.favouriteFranchises());
+        profile.setLanguage((mapProfileLanguageToTmdb(request.language())));
 
         return profile;
     }
-
 
     public ProfileResponse toProfileResponse(Profile profile) {
         if (profile == null) {
@@ -30,7 +38,7 @@ public class ProfileMapper {
                 profile.getUsername(),
                 email,
                 profile.getFavouriteGenres(),
-                profile.getFavouriteFranchises()
+                profile.getLanguage()
         );
     }
 }

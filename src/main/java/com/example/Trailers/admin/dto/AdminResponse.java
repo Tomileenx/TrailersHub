@@ -1,4 +1,4 @@
-package com.example.Trailers.admin;
+package com.example.Trailers.admin.dto;
 
 public record AdminResponse(
         Integer id,

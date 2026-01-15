@@ -1,5 +1,6 @@
-package com.example.Trailers.admin;
+package com.example.Trailers.admin.service;
 
+import com.example.Trailers.admin.dto.AdminResponse;
 import com.example.Trailers.roles.Role;
 import com.example.Trailers.user.repo.UserAccountRepo;
 import lombok.AllArgsConstructor;

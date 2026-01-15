@@ -9,7 +9,7 @@ public record ProfileResponse(
 
         Set<String> favouriteGenres,
 
-        Set<String> favouriteFranchises
+        String language
 
 ) {
 }

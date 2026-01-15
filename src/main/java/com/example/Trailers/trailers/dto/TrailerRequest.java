@@ -1,4 +1,4 @@
-package com.example.Trailers.trailers;
+package com.example.Trailers.trailers.dto;
 
 import java.util.Set;
 
@@ -13,6 +13,6 @@ public record TrailerRequest(
 
         Set<String> genres,
 
-        String franchise
+        Double rating
 ) {
 }

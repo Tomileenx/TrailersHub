@@ -1,5 +1,10 @@
 jwt:
   secret: ${SECRET_KEY}
+
+tmdb:
+  api:
+    token: "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI0YzE4YTVmNTUyZTI2ZTA3YWIxNGFjMTY3YTJjZjM1ZiIsIm5iZiI6MTc2ODEyMTE5MS4yNTQwMDAyLCJzdWIiOiI2OTYzNjM2N2M0MDFjMjM0NzAxZDhmMzMiLCJzY29wZXMiOlsiYXBpX3JlYWQiXSwidmVyc2lvbiI6MX0.oJfKKuj0M8GrNd5Mqr5olGGMBL5Kl2ewUKn2Oo4h0RE"
+
 spring:
   application:
     name: Trailers

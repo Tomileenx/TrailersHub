@@ -1,4 +1,4 @@
-package com.example.Trailers.trailers;
+package com.example.Trailers.trailers.model;
 
 import com.example.Trailers.user.model.UserAccount;
 import jakarta.persistence.*;
@@ -21,7 +21,10 @@ import java.util.Set;
 public class Trailers {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
+
+    @Column(nullable = false, unique = true)
+    private Long tmdbId;
 
     @Column(
             unique = true,
@@ -35,8 +38,6 @@ public class Trailers {
     @Column(nullable = false)
     private String videoUrl;
 
-    private String duration;
-
     @ElementCollection
     @CollectionTable(
             name = "trailer_genres",
@@ -45,8 +46,7 @@ public class Trailers {
     @Column(name = "genre")
     private Set<String> genres = new HashSet<>();
 
-    @Column(nullable = false)
-    private String franchise;
+    private Double rating;
 
     private LocalDate releaseDate;
 

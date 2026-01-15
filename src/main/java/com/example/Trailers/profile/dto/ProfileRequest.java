@@ -15,7 +15,6 @@ public record ProfileRequest(
         Set<String> favouriteGenres,
 
         @NotNull
-        @Size(max = 3, message = "Maximum of three franchises allowed")
-        Set<String> favouriteFranchises
+        String language
 ) {
 }

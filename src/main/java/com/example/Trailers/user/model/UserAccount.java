@@ -2,7 +2,7 @@ package com.example.Trailers.user.model;
 
 import com.example.Trailers.roles.Role;
 import com.example.Trailers.profile.model.Profile;
-import com.example.Trailers.trailers.Trailers;
+import com.example.Trailers.trailers.model.Trailers;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

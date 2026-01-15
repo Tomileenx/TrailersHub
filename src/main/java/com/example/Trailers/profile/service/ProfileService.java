@@ -80,8 +80,10 @@ public class ProfileService {
             profile.setFavouriteGenres(new HashSet<>(request.favouriteGenres()));
         }
 
-        if (request.favouriteFranchises() != null) {
-            profile.setFavouriteFranchises(new HashSet<>(request.favouriteFranchises()));
+        if (request.language() != null) {
+            profile.setLanguage(
+                    profileMapper.mapProfileLanguageToTmdb(request.language())
+            );
         }
     }
 
