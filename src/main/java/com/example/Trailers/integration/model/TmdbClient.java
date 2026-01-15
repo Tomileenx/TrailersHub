@@ -11,7 +11,7 @@ public class TmdbClient {
    private final WebClient webClient;
 
 
-   public TmdbClient(WebClient.Builder builder, @Value("${tmdb.api.token}") String token) {
+   public TmdbClient(WebClient.Builder builder, @Value("${TMDB_TOKEN}") String token) {
        this.webClient = builder
                .baseUrl("https://api.themoviedb.org/3")
                .defaultHeader(HttpHeaders.AUTHORIZATION, token)

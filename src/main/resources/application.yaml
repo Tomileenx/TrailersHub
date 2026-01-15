@@ -3,16 +3,15 @@ jwt:
 
 tmdb:
   api:
-    token: "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI0YzE4YTVmNTUyZTI2ZTA3YWIxNGFjMTY3YTJjZjM1ZiIsIm5iZiI6MTc2ODEyMTE5MS4yNTQwMDAyLCJzdWIiOiI2OTYzNjM2N2M0MDFjMjM0NzAxZDhmMzMiLCJzY29wZXMiOlsiYXBpX3JlYWQiXSwidmVyc2lvbiI6MX0.oJfKKuj0M8GrNd5Mqr5olGGMBL5Kl2ewUKn2Oo4h0RE"
-
+    token: ${TMDB_TOKEN}
 spring:
   application:
     name: Trailers
   mail:
     host: smtp.gmail.com
     port: 587
-    username: olarewajuoluwatomi@gmail.com
-    password: qlba ilwo sapr yzqn
+    username: ${MAIL_NAME}
+    password: ${MAIL_PASS}
     properties:
       mail:
         smtp:
