@@ -15,6 +15,7 @@ public class TmdbScheduler {
   @Scheduled(cron = "0 0 3 * * MON")
   public void syncTrendingMovies() {
     log.info("Running weekly TMDB import");
-    tmdbImportService.importTrendingMoviesMax3pages();
+    // tmdbImportService.importTrendingMoviesMax3pages();
+    tmdbImportService.importTrendingMovies();
   }
 }
