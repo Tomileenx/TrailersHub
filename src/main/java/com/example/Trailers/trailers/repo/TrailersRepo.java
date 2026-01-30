@@ -40,5 +40,4 @@ public interface TrailersRepo extends JpaRepository<Trailers, Long> {
 
   boolean existsByTmdbId(Long id);
 
-  Optional<Trailers> findByTitleIgnoreCase(String title);
 }

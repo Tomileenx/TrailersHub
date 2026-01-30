@@ -102,11 +102,11 @@ public class TrailerService {
 
   @PreAuthorize("hasAuthority('ROLE_USER')")
   @Transactional
-  public void saveTrailer(String title, UserAccount userAccount) {
+  public void saveTrailer(Long tmdbId, UserAccount userAccount) {
     UserAccount user = userAccountRepo.findById(userAccount.getId())
         .orElseThrow(() -> new EntityNotFoundException("User not found"));
 
-    Trailers trailer = trailersRepo.findByTitleIgnoreCase(title)
+    Trailers trailer = trailersRepo.findByTmdbId(tmdbId)
         .orElseThrow(() -> new EntityNotFoundException("Trailer not found"));
 
     boolean alreadySaved = user.getSavedTrailers().stream()
@@ -121,11 +121,11 @@ public class TrailerService {
 
   @PreAuthorize("hasAuthority('ROLE_USER')")
   @Transactional
-  public void unsaveTrailer(String title, UserAccount userAccount) {
+  public void unsaveTrailer(Long tmdbId, UserAccount userAccount) {
     UserAccount user = userAccountRepo.findById(userAccount.getId())
         .orElseThrow(() -> new EntityNotFoundException("User not found"));
 
-    Trailers trailer = trailersRepo.findByTitleIgnoreCase(title)
+    Trailers trailer = trailersRepo.findByTmdbId(tmdbId)
         .orElseThrow(() -> new EntityNotFoundException("Trailer not found"));
 
     boolean removed = user.getSavedTrailers()

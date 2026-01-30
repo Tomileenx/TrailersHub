@@ -1,6 +1,5 @@
 package com.example.Trailers.trailers.controller;
 
-import com.example.Trailers.integration.service.TmdbImportService;
 import com.example.Trailers.trailers.dto.TrailerResponse;
 import com.example.Trailers.trailers.service.TrailerService;
 import com.example.Trailers.user.model.UserAccount;
@@ -15,16 +14,7 @@ import java.util.Set;
 @RestController
 @AllArgsConstructor
 public class TrailerController {
-  private final TmdbImportService tmdbImportService;
   private final TrailerService trailerService;
-
-  @PostMapping("/admin/import/trailer")
-  public ResponseEntity<String> importTrailer(
-      @AuthenticationPrincipal UserAccount userAccount) {
-    tmdbImportService.importTrendingMoviesMax3pages();
-    return ResponseEntity.ok(
-        "Trailer successfully imported");
-  }
 
   @GetMapping("/user/trailer/title")
   public List<TrailerResponse> getTrailerByTitle(
@@ -56,18 +46,18 @@ public class TrailerController {
 
   @PostMapping("/user/trailer/save")
   public ResponseEntity<String> saveTrailer(
-      @RequestParam String title,
+      @RequestParam Long tmdbId,
       @AuthenticationPrincipal UserAccount userAccount) {
-    trailerService.saveTrailer(title, userAccount);
+    trailerService.saveTrailer(tmdbId, userAccount);
     return ResponseEntity.ok(
         "Trailer successfully saved");
   }
 
   @DeleteMapping("/user/trailer/unsave")
   public ResponseEntity<String> unSaveTrailer(
-      @RequestParam String title,
+      @RequestParam Long tmdbId,
       @AuthenticationPrincipal UserAccount userAccount) {
-    trailerService.unsaveTrailer(title, userAccount);
+    trailerService.unsaveTrailer(tmdbId, userAccount);
     return ResponseEntity.ok(
         "Trailer successfully unsaved");
   }

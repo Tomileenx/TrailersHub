@@ -24,8 +24,8 @@ public class TmdbImportService {
 
   @PreAuthorize("hasAuthority('ROLE_ADMIN')")
   @Transactional
-  public void importTrendingMoviesMax3pages() {
-    int maxPages = 5;
+  public void importTrendingMovies() {
+    int maxPages = 3;
 
     for (int page = 1; page <= maxPages; page++) {
       TrendingResponse response = tmdbClient.getTrendingMovies("week", page);
