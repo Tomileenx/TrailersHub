@@ -3,16 +3,15 @@ package com.example.Trailers.trailers.dto;
 import java.util.Set;
 
 public record TrailerRequest(
-        String title,
+    String title,
 
-        String description,
+    String description,
 
-        String videoUrl,
+    String videoUrl,
 
-        String duration,
+    String duration,
 
-        Set<String> genres,
+    Set<String> genres,
 
-        Double rating
-) {
+    Double rating) {
 }

@@ -11,21 +11,19 @@ import org.springframework.stereotype.Component;
 @AllArgsConstructor
 public class TrailerMapper {
 
-    private final TmdbClient tmdbClient;
+  private final TmdbClient tmdbClient;
 
-    public TrailerResponse toTrailerResponse(
-            Trailers trailers,
-            String language
-    ) {
-        TmdbMovieDetails details = tmdbClient.getMovieDetails(trailers.getTmdbId(), language);
+  public TrailerResponse toTrailerResponse(
+      Trailers trailers,
+      String language) {
+    TmdbMovieDetails details = tmdbClient.getMovieDetails(trailers.getTmdbId(), language);
 
-        return new TrailerResponse(
-                details.title(),
-                details.overview(),
-                trailers.getReleaseDate(),
-                trailers.getGenres(),
-                trailers.getRating(),
-                trailers.getVideoUrl()
-        );
-    }
+    return new TrailerResponse(
+        details.title(),
+        details.overview(),
+        trailers.getReleaseDate(),
+        trailers.getGenres(),
+        trailers.getRating(),
+        trailers.getVideoUrl());
+  }
 }

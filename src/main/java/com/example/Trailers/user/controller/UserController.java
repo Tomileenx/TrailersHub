@@ -15,26 +15,22 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @AllArgsConstructor
 public class UserController {
-    private final UserAccountService userAccountService;
+  private final UserAccountService userAccountService;
 
-    @PostMapping("user/change-password")
-    public ResponseEntity<String> changeMyPassword(
-            @Valid @RequestBody ChangePasswordRequest request,
-            @AuthenticationPrincipal UserAccount userAccount
-    ) {
-        userAccountService.changePassword(userAccount, request.oldPassword(), request.newPassword());
-        return ResponseEntity.ok(
-                "Password successfully changed"
-        );
-    }
+  @PostMapping("user/change-password")
+  public ResponseEntity<String> changeMyPassword(
+      @Valid @RequestBody ChangePasswordRequest request,
+      @AuthenticationPrincipal UserAccount userAccount) {
+    userAccountService.changePassword(userAccount, request.oldPassword(), request.newPassword());
+    return ResponseEntity.ok(
+        "Password successfully changed");
+  }
 
-    @DeleteMapping("user/delete-account")
-    public ResponseEntity<String> deleteMyAccount(
-            @AuthenticationPrincipal UserAccount userAccount
-    ) {
-        userAccountService.deleteMyAccount(userAccount);
-        return ResponseEntity.ok(
-                "Account successfully deleted"
-        );
-    }
+  @DeleteMapping("user/delete-account")
+  public ResponseEntity<String> deleteMyAccount(
+      @AuthenticationPrincipal UserAccount userAccount) {
+    userAccountService.deleteMyAccount(userAccount);
+    return ResponseEntity.ok(
+        "Account successfully deleted");
+  }
 }

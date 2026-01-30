@@ -19,51 +19,46 @@ import java.util.UUID;
 @Transactional
 public class PasswordResetService {
 
-    private final UserAccountRepo userAccountRepo;
-    private final PasswordTokenRepo passwordTokenRepo;
-    private final PasswordEncoder passwordEncoder;
-    private final EmailService emailService;
+  private final UserAccountRepo userAccountRepo;
+  private final PasswordTokenRepo passwordTokenRepo;
+  private final PasswordEncoder passwordEncoder;
+  private final EmailService emailService;
 
+  public void forgotPassword(ForgotPasswordRequest dto) {
+    UserAccount user = userAccountRepo.findUsersByEmail(dto.email())
+        .orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
-    public void forgotPassword(ForgotPasswordRequest dto) {
-       UserAccount user = userAccountRepo.findUsersByEmail(dto.email())
-               .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+    passwordTokenRepo.deleteByUser(user);
 
-       passwordTokenRepo.deleteByUser(user);
+    String token = UUID.randomUUID().toString();
 
-       String token = UUID.randomUUID().toString();
+    PasswordResetToken resetToken = new PasswordResetToken();
+    resetToken.setToken(token);
+    resetToken.setUser(user);
+    resetToken.setExpiresAt(
+        Instant.now().plus(15, ChronoUnit.HOURS));
 
-       PasswordResetToken resetToken = new PasswordResetToken();
-       resetToken.setToken(token);
-       resetToken.setUser(user);
-       resetToken.setExpiresAt(
-               Instant.now().plus(15, ChronoUnit.HOURS)
-       );
+    passwordTokenRepo.save(resetToken);
 
-       passwordTokenRepo.save(resetToken);
+    emailService.send(
+        user.getEmail(),
+        "Password Reset",
+        "Reset your password using this token: " + token);
+  }
 
-       emailService.send(
-               user.getEmail(),
-               "Password Reset",
-               "Reset your password using this token: " + token
-       );
+  public void resetPassword(String token, String newPassword) {
+    PasswordResetToken resetToken = passwordTokenRepo.findValidToken(token)
+        .orElseThrow(() -> new IllegalArgumentException("Invalid or expired token"));
+
+    UserAccount user = resetToken.getUser();
+
+    if (newPassword.length() < 8) {
+      throw new IllegalArgumentException("Password too short");
     }
 
-    public void resetPassword(String token, String newPassword) {
-        PasswordResetToken resetToken =
-                passwordTokenRepo.findValidToken(token)
-                        .orElseThrow(() ->
-                                new IllegalArgumentException("Invalid or expired token"));
+    user.setPassword(passwordEncoder.encode(newPassword));
 
-        UserAccount user = resetToken.getUser();
-
-        if (newPassword.length() < 8) {
-            throw new IllegalArgumentException("Password too short");
-        }
-
-        user.setPassword(passwordEncoder.encode(newPassword));
-
-        userAccountRepo.save(user);
-        passwordTokenRepo.delete(resetToken);
-    }
+    userAccountRepo.save(user);
+    passwordTokenRepo.delete(resetToken);
+  }
 }

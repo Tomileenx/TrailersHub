@@ -8,12 +8,12 @@ import org.springframework.stereotype.Service;
 @Component
 public class AccountMapper {
 
-    public UserAccount toUserAccount(AuthRequest dto) {
-        UserAccount userAccount = new UserAccount();
+  public UserAccount toUserAccount(AuthRequest dto) {
+    UserAccount userAccount = new UserAccount();
 
-        userAccount.setEmail(dto.email());
-        userAccount.setPassword(dto.password());
+    userAccount.setEmail(dto.email());
+    userAccount.setPassword(dto.password());
 
-        return userAccount;
-    }
+    return userAccount;
+  }
 }

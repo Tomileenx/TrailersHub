@@ -1,6 +1,5 @@
 package com.example.Trailers.profile.model;
 
-
 import com.example.Trailers.user.model.UserAccount;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -16,25 +15,19 @@ import java.util.Set;
 @Getter
 @Setter
 public class Profile {
-    @Id
-    @GeneratedValue
-    private Integer id;
+  @Id
+  @GeneratedValue
+  private Integer id;
 
-    private String username;
+  private String username;
 
-    @ElementCollection
-    @CollectionTable(
-         name = "user_favourite_genres",
-         joinColumns = @JoinColumn(name = "user_profile_id")
-    )
-    @Column(name = "genre")
-    private Set<String> favouriteGenres;
+  @ElementCollection
+  @CollectionTable(name = "user_favourite_genres", joinColumns = @JoinColumn(name = "user_profile_id"))
+  @Column(name = "genre")
+  private Set<String> favouriteGenres;
 
-   private String language;
+  private String language;
 
-    @OneToOne(
-            fetch = FetchType.LAZY,
-            mappedBy = "userProfile"
-    )
-    private UserAccount userAccount;
+  @OneToOne(fetch = FetchType.LAZY, mappedBy = "userProfile")
+  private UserAccount userAccount;
 }

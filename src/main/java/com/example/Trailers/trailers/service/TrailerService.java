@@ -19,142 +19,135 @@ import java.util.Set;
 @Service
 @AllArgsConstructor
 public class TrailerService {
-    private final TrailersRepo trailersRepo;
-    private final UserAccountRepo userAccountRepo;
-    private final TrailerMapper trailerMapper;
-    private final ProfileMapper profileMapper;
+  private final TrailersRepo trailersRepo;
+  private final UserAccountRepo userAccountRepo;
+  private final TrailerMapper trailerMapper;
+  private final ProfileMapper profileMapper;
 
-    @PreAuthorize("hasAuthority('ROLE_USER')")
-    @Transactional(readOnly = true)
-    public List<TrailerResponse> viewTrailersByTitle(String title, UserAccount userAccount) {
-       List<Trailers> trailers = trailersRepo.findByTitleContainingIgnoreCase(title);
+  @PreAuthorize("hasAuthority('ROLE_USER')")
+  @Transactional(readOnly = true)
+  public List<TrailerResponse> viewTrailersByTitle(String title, UserAccount userAccount) {
+    List<Trailers> trailers = trailersRepo.findByTitleContainingIgnoreCase(title);
 
-       if (trailers.isEmpty()) {
-           throw new EntityNotFoundException("No trailer found by that title");
-       }
-
-       String language = userAccount.getUserProfile().getLanguage();
-
-       return trailers
-               .stream()
-               .map(t -> trailerMapper.toTrailerResponse(t, language))
-               .toList();
+    if (trailers.isEmpty()) {
+      throw new EntityNotFoundException("No trailer found by that title");
     }
 
-    @PreAuthorize("hasAuthority('ROLE_USER')")
-    @Transactional(readOnly = true)
-    public List<TrailerResponse> viewTrailersByGenresIn(
-            Set<String> genres,
-            UserAccount userAccount
-    ) {
-        List<Trailers> trailers = trailersRepo.findByGenresIn(genres);
+    String language = userAccount.getUserProfile().getLanguage();
 
-        if (trailers.isEmpty()) {
-            throw new EntityNotFoundException("No trailers found by that genre");
-        }
+    return trailers
+        .stream()
+        .map(t -> trailerMapper.toTrailerResponse(t, language))
+        .toList();
+  }
 
-        String language = userAccount.getUserProfile().getLanguage();
+  @PreAuthorize("hasAuthority('ROLE_USER')")
+  @Transactional(readOnly = true)
+  public List<TrailerResponse> viewTrailersByGenresIn(
+      Set<String> genres,
+      UserAccount userAccount) {
+    List<Trailers> trailers = trailersRepo.findByGenresIn(genres);
 
-        return trailers
-                .stream()
-                .map(t -> trailerMapper.toTrailerResponse(t, language))
-                .toList();
+    if (trailers.isEmpty()) {
+      throw new EntityNotFoundException("No trailers found by that genre");
     }
 
-    public List<TrailerResponse> viewTrailersByYearOrMonth(
-            Integer year,
-            Integer month,
-            UserAccount userAccount
-    ) {
-        List<Trailers> trailers = List.of();
+    String language = userAccount.getUserProfile().getLanguage();
 
-        if (month == null) {
-            trailers = trailersRepo.findByReleaseYear(year);
-        } else {
-            trailers = trailersRepo.findByReleaseYearAndMonth(year, month);
-        }
+    return trailers
+        .stream()
+        .map(t -> trailerMapper.toTrailerResponse(t, language))
+        .toList();
+  }
 
-        if (trailers.isEmpty()) {
-            throw new EntityNotFoundException("No trailers found by the given date");
-        }
+  public List<TrailerResponse> viewTrailersByYearOrMonth(
+      Integer year,
+      Integer month,
+      UserAccount userAccount) {
+    List<Trailers> trailers = List.of();
 
-        String language = userAccount.getUserProfile().getLanguage();
-
-        return trailers
-                .stream()
-                .map(t -> trailerMapper.toTrailerResponse(t, language))
-                .toList();
+    if (month == null) {
+      trailers = trailersRepo.findByReleaseYear(year);
+    } else {
+      trailers = trailersRepo.findByReleaseYearAndMonth(year, month);
     }
 
-    public List<TrailerResponse> viewTrailersByTopRating (
-            UserAccount userAccount
-    ) {
-        List<Trailers> trailers = trailersRepo.findByRatingGreaterThanEqual(7.0);
-
-        if (trailers.isEmpty()) {
-            throw new EntityNotFoundException("No trailers found by the specified rating");
-        }
-
-        String language = userAccount.getUserProfile().getLanguage();
-
-        return trailers
-                .stream()
-                .map(t -> trailerMapper.toTrailerResponse(t, language))
-                .toList();
+    if (trailers.isEmpty()) {
+      throw new EntityNotFoundException("No trailers found by the given date");
     }
 
-    @PreAuthorize("hasAuthority('ROLE_USER')")
-    @Transactional
-    public void saveTrailer(String title, UserAccount userAccount) {
-        UserAccount user = userAccountRepo.findById(userAccount.getId())
-                .orElseThrow(() -> new EntityNotFoundException("User not found"));
+    String language = userAccount.getUserProfile().getLanguage();
 
-        Trailers trailer = trailersRepo.findByTitleIgnoreCase(title)
-                .orElseThrow(() -> new EntityNotFoundException("Trailer not found"));
+    return trailers
+        .stream()
+        .map(t -> trailerMapper.toTrailerResponse(t, language))
+        .toList();
+  }
 
-        boolean alreadySaved = user.getSavedTrailers().stream()
-                        .anyMatch(t -> t.getId().equals(trailer.getId()));
+  public List<TrailerResponse> viewTrailersByTopRating(
+      UserAccount userAccount) {
+    List<Trailers> trailers = trailersRepo.findByRatingGreaterThanEqual(7.0);
 
-        if (alreadySaved) {
-            throw new IllegalArgumentException("Trailer is already saved");
-        }
-
-        user.getSavedTrailers().add(trailer);
+    if (trailers.isEmpty()) {
+      throw new EntityNotFoundException("No trailers found by the specified rating");
     }
 
-    @PreAuthorize("hasAuthority('ROLE_USER')")
-    @Transactional
-    public void unsaveTrailer(String title, UserAccount userAccount) {
-        UserAccount user = userAccountRepo.findById(userAccount.getId())
-                .orElseThrow(() -> new EntityNotFoundException("User not found"));
+    String language = userAccount.getUserProfile().getLanguage();
 
+    return trailers
+        .stream()
+        .map(t -> trailerMapper.toTrailerResponse(t, language))
+        .toList();
+  }
 
-        Trailers trailer = trailersRepo.findByTitleIgnoreCase(title)
-                .orElseThrow(() -> new EntityNotFoundException("Trailer not found"));
+  @PreAuthorize("hasAuthority('ROLE_USER')")
+  @Transactional
+  public void saveTrailer(String title, UserAccount userAccount) {
+    UserAccount user = userAccountRepo.findById(userAccount.getId())
+        .orElseThrow(() -> new EntityNotFoundException("User not found"));
 
-        boolean removed = user.getSavedTrailers()
-                .removeIf(t -> t.getId().equals(trailer.getId()));
+    Trailers trailer = trailersRepo.findByTitleIgnoreCase(title)
+        .orElseThrow(() -> new EntityNotFoundException("Trailer not found"));
 
-        if (!removed) {
-            throw new IllegalArgumentException("Trailer is not saved");
-        }
+    boolean alreadySaved = user.getSavedTrailers().stream()
+        .anyMatch(t -> t.getId().equals(trailer.getId()));
+
+    if (alreadySaved) {
+      throw new IllegalArgumentException("Trailer is already saved");
     }
 
-    @PreAuthorize("hasAuthority('ROLE_USER')")
-    @Transactional(readOnly = true)
-    public List<TrailerResponse> getSavedTrailers(UserAccount userAccount) {
+    user.getSavedTrailers().add(trailer);
+  }
 
-        UserAccount user = userAccountRepo.findById(userAccount.getId())
-                .orElseThrow(() -> new EntityNotFoundException("User not found"));
+  @PreAuthorize("hasAuthority('ROLE_USER')")
+  @Transactional
+  public void unsaveTrailer(String title, UserAccount userAccount) {
+    UserAccount user = userAccountRepo.findById(userAccount.getId())
+        .orElseThrow(() -> new EntityNotFoundException("User not found"));
 
+    Trailers trailer = trailersRepo.findByTitleIgnoreCase(title)
+        .orElseThrow(() -> new EntityNotFoundException("Trailer not found"));
 
-        String language = user.getUserProfile().getLanguage();
+    boolean removed = user.getSavedTrailers()
+        .removeIf(t -> t.getId().equals(trailer.getId()));
 
-        return user.getSavedTrailers().stream()
-                .map(t -> trailerMapper.toTrailerResponse(t, language))
-                .toList();
-
+    if (!removed) {
+      throw new IllegalArgumentException("Trailer is not saved");
     }
+  }
+
+  @PreAuthorize("hasAuthority('ROLE_USER')")
+  @Transactional(readOnly = true)
+  public List<TrailerResponse> getSavedTrailers(UserAccount userAccount) {
+
+    UserAccount user = userAccountRepo.findById(userAccount.getId())
+        .orElseThrow(() -> new EntityNotFoundException("User not found"));
+
+    String language = user.getUserProfile().getLanguage();
+
+    return user.getSavedTrailers().stream()
+        .map(t -> trailerMapper.toTrailerResponse(t, language))
+        .toList();
+
+  }
 }
-
-

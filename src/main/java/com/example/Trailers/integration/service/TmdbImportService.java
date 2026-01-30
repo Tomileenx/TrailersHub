@@ -18,47 +18,47 @@ import java.util.stream.Collectors;
 @Service
 @AllArgsConstructor
 public class TmdbImportService {
-    private final TmdbClient tmdbClient;
-    private final TrailersRepo trailersRepo;
-    private final GenreCache genreCache;
+  private final TmdbClient tmdbClient;
+  private final TrailersRepo trailersRepo;
+  private final GenreCache genreCache;
 
-    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
-    @Transactional
-    public void importTrendingMoviesMax3pages() {
-        int maxPages = 5;
+  @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+  @Transactional
+  public void importTrendingMoviesMax3pages() {
+    int maxPages = 5;
 
-        for (int page = 1; page <= maxPages; page++) {
-            TrendingResponse response = tmdbClient.getTrendingMovies("week", page);
+    for (int page = 1; page <= maxPages; page++) {
+      TrendingResponse response = tmdbClient.getTrendingMovies("week", page);
 
-            if (response == null || response.results().isEmpty()) {
-                break; // no more results
-            }
+      if (response == null || response.results().isEmpty()) {
+        break; // no more results
+      }
 
-            for (TmdbMovieSummary movie : response.results()) {
-                if (trailersRepo.existsByTmdbId(movie.id())) {
-                    continue;
-                }
-
-                TmdbVideo video = tmdbClient.getTrailer(movie.id());
-                if (video == null) continue;
-
-                Set<String> genres = movie.genreIds().stream()
-                        .map(genreCache::getName)
-                        .collect(Collectors.toSet());
-
-                Trailers trailer = new Trailers();
-
-                trailer.setTmdbId(movie.id());
-                trailer.setTitle(movie.title());
-                trailer.setDescription(movie.overview());
-                trailer.setReleaseDate(movie.releaseDate());
-                trailer.setGenres(genres);
-                trailer.setRating(movie.voteAverage());
-                trailer.setVideoUrl("https://www.youtube.com/watch?v=" + video.key());
-
-
-                trailersRepo.save(trailer);
-            }
+      for (TmdbMovieSummary movie : response.results()) {
+        if (trailersRepo.existsByTmdbId(movie.id())) {
+          continue;
         }
+
+        TmdbVideo video = tmdbClient.getTrailer(movie.id());
+        if (video == null)
+          continue;
+
+        Set<String> genres = movie.genreIds().stream()
+            .map(genreCache::getName)
+            .collect(Collectors.toSet());
+
+        Trailers trailer = new Trailers();
+
+        trailer.setTmdbId(movie.id());
+        trailer.setTitle(movie.title());
+        trailer.setDescription(movie.overview());
+        trailer.setReleaseDate(movie.releaseDate());
+        trailer.setGenres(genres);
+        trailer.setRating(movie.voteAverage());
+        trailer.setVideoUrl("https://www.youtube.com/watch?v=" + video.key());
+
+        trailersRepo.save(trailer);
+      }
     }
+  }
 }
