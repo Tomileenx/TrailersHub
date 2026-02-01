@@ -18,65 +18,65 @@ import java.util.function.Function;
 
 @Service
 public class JwtService {
-    @Value("${jwt.secret}")
-    private final String secretKey;
+  @Value("${jwt.secret}")
+  private String secretKey;
 
-    public JwtService() {
-        try {
-            KeyGenerator keyGen = KeyGenerator.getInstance("HmacSHA256");
-            SecretKey sk = keyGen.generateKey();
-            secretKey = Base64.getEncoder().encodeToString(sk.getEncoded());
-        } catch (NoSuchAlgorithmException e) {
-            throw new RuntimeException(e);
-        }
+  public JwtService() {
+    try {
+      KeyGenerator keyGen = KeyGenerator.getInstance("HmacSHA256");
+      SecretKey sk = keyGen.generateKey();
+      secretKey = Base64.getEncoder().encodeToString(sk.getEncoded());
+    } catch (NoSuchAlgorithmException e) {
+      throw new RuntimeException(e);
     }
+  }
 
-    public String generateToken(UserAccount userAccount) {
-        return Jwts.builder()
-                .claim("role", userAccount.getRole().name())
-                .subject(userAccount.getUsername())
-                .issuedAt(new Date(System.currentTimeMillis()))
-                .expiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 ))
-                .signWith(getKey())
-                .compact();
-    }
+  public String generateToken(UserAccount userAccount) {
+    return Jwts.builder()
+        .claim("role", userAccount.getRole().name())
+        .subject(userAccount.getUsername())
+        .issuedAt(new Date(System.currentTimeMillis()))
+        .expiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60))
+        .signWith(getKey())
+        .compact();
+  }
 
-    private SecretKey getKey() {
-        byte[] keyBytes = Decoders.BASE64.decode(secretKey);
-        return Keys.hmacShaKeyFor(keyBytes);
-    }
+  private SecretKey getKey() {
+    byte[] keyBytes = Decoders.BASE64.decode(secretKey);
+    return Keys.hmacShaKeyFor(keyBytes);
+  }
 
-    public String extractUserName(String token) {
-        return extractClaim(token, Claims::getSubject);
-    }
+  public String extractUserName(String token) {
+    return extractClaim(token, Claims::getSubject);
+  }
 
-    private <T> T extractClaim(String token, Function<Claims, T> claimResolver) {
-        final Claims claims = extractAllClaims(token);
-        return claimResolver.apply(claims);
-    }
+  private <T> T extractClaim(String token, Function<Claims, T> claimResolver) {
+    final Claims claims = extractAllClaims(token);
+    return claimResolver.apply(claims);
+  }
 
-    private Claims extractAllClaims(String token) {
-        return Jwts.parser()
-                .verifyWith(getKey())
-                .build()
-                .parseSignedClaims(token)
-                .getPayload();
-    }
+  private Claims extractAllClaims(String token) {
+    return Jwts.parser()
+        .verifyWith(getKey())
+        .build()
+        .parseSignedClaims(token)
+        .getPayload();
+  }
 
-    private Date extractExpiration(String token) {
-        return extractClaim(token, Claims::getExpiration);
-    }
+  private Date extractExpiration(String token) {
+    return extractClaim(token, Claims::getExpiration);
+  }
 
-    public boolean isTokenValid(String token, UserDetails userDetails) {
-        final String username = extractUserName(token);
-        final Date expiration = extractAllClaims(token).getExpiration();
-        return username.equals(userDetails.getUsername())
-                && expiration.after(new Date());
-    }
+  public boolean isTokenValid(String token, UserDetails userDetails) {
+    final String username = extractUserName(token);
+    final Date expiration = extractAllClaims(token).getExpiration();
+    return username.equals(userDetails.getUsername())
+        && expiration.after(new Date());
+  }
 
-    private boolean isTokenExpired(String token) {
-        return  extractAllClaims(token)
-                .getExpiration()
-                .before(new Date());
-    }
+  private boolean isTokenExpired(String token) {
+    return extractAllClaims(token)
+        .getExpiration()
+        .before(new Date());
+  }
 }

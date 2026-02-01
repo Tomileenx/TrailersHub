@@ -1,8 +1,7 @@
 package com.example.Trailers.auth.dto;
 
 public record AuthResponse(
-        String token,
+    String token,
 
-        String message
-) {
+    String message) {
 }

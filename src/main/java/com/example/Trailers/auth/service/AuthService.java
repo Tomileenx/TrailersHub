@@ -19,74 +19,67 @@ import org.springframework.stereotype.Service;
 @Service
 @AllArgsConstructor
 public class AuthService {
-    private final UserAccountRepo userAccountRepo;
-    private final AccountMapper accountMapper;
-    private final PasswordEncoder passwordEncoder;
-    private final JwtService jwtService;
-    private final AuthenticationManager authenticationManager;
+  private final UserAccountRepo userAccountRepo;
+  private final AccountMapper accountMapper;
+  private final PasswordEncoder passwordEncoder;
+  private final JwtService jwtService;
+  private final AuthenticationManager authenticationManager;
 
+  public AuthResponse register(AuthRequest dto) {
+    userAccountRepo.findUsersByEmail(dto.email())
+        .ifPresent(userAccount -> {
+          throw new UserAlreadyExists(
+              "user with " + dto.email() + " already exists");
+        });
 
-    public AuthResponse register(AuthRequest dto) {
-        userAccountRepo.findUsersByEmail(dto.email())
-                .ifPresent(userAccount -> {
-                    throw new UserAlreadyExists(
-                            "user with " + dto.email() + " already exists"
-                    );
-                });
+    UserAccount userAccount = accountMapper.toUserAccount(dto);
 
-        UserAccount userAccount = accountMapper.toUserAccount(dto);
+    userAccount.setPassword(passwordEncoder.encode(dto.password()));
+    userAccount.setRole(Role.ROLE_USER);
 
-        userAccount.setPassword(passwordEncoder.encode(dto.password()));
-        userAccount.setRole(Role.ROLE_USER);
+    userAccountRepo.save(userAccount);
 
-        userAccountRepo.save(userAccount);
+    String jwtToken = jwtService.generateToken(userAccount);
 
-        String jwtToken = jwtService.generateToken(userAccount);
+    return new AuthResponse(
+        jwtToken,
+        "Registration successful");
+  }
 
-        return new AuthResponse(
-                jwtToken,
-                "Registration successful"
-        );
-    }
+  public AuthResponse login(AuthRequest dto) {
+    authenticationManager.authenticate(
+        new UsernamePasswordAuthenticationToken(
+            dto.email(),
+            dto.password()));
 
-    public AuthResponse login(AuthRequest dto) {
-        authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                           dto.email(),
-                           dto.password()
-                )
-        );
+    var user = userAccountRepo.findUsersByEmail(dto.email())
+        .orElseThrow(() -> new UsernameNotFoundException(dto.email()));
 
-        var user = userAccountRepo.findUsersByEmail(dto.email())
-                .orElseThrow(() -> new UsernameNotFoundException(dto.email()));
+    String jwtToken = jwtService.generateToken(user);
 
-        String jwtToken = jwtService.generateToken(user);
+    return new AuthResponse(
+        jwtToken,
+        "Login is successful");
+  }
 
-        return new AuthResponse(
-                jwtToken,
-                "Login is successful"
-        );
-    }
+  @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+  public AuthResponse registerAdmin(AuthRequest dto) {
+    userAccountRepo.findUsersByEmail(dto.email())
+        .ifPresent(userAccount -> {
+          throw new UserAlreadyExists("admin with " + dto.email() + "already exists");
+        });
 
-    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
-    public AuthResponse registerAdmin(AuthRequest dto) {
-        userAccountRepo.findUsersByEmail(dto.email())
-                .ifPresent(userAccount -> {
-                    throw new UserAlreadyExists("admin with " + dto.email() + "already exists");
-                });
+    UserAccount userAccount = accountMapper.toUserAccount(dto);
 
-        UserAccount userAccount = accountMapper.toUserAccount(dto);
+    userAccount.setEmail(dto.email());
+    userAccount.setRole(Role.ROLE_ADMIN);
 
-        userAccount.setEmail(dto.email());
-        userAccount.setRole(Role.ROLE_ADMIN);
+    userAccountRepo.save(userAccount);
 
-        userAccountRepo.save(userAccount);
+    String jwtToken = jwtService.generateToken(userAccount);
 
-        String jwtToken = jwtService.generateToken(userAccount);
-
-        return new AuthResponse(
-                jwtToken,
-                "Admin registered successfully"
-        );
-    }
+    return new AuthResponse(
+        jwtToken,
+        "Admin registered successfully");
+  }
 }

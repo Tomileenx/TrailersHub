@@ -11,16 +11,15 @@ import java.util.Optional;
 
 public interface PasswordTokenRepo extends JpaRepository<PasswordResetToken, Long> {
 
-    @Query("""
-      select t from PasswordResetToken t
-      where t.token = :token
-     and t.expiresAt > CURRENT_TIMESTAMP
-     """
-    )
-    Optional<PasswordResetToken> findValidToken(@Param("token") String token);
+  @Query("""
+       select t from PasswordResetToken t
+       where t.token = :token
+      and t.expiresAt > CURRENT_TIMESTAMP
+      """)
+  Optional<PasswordResetToken> findValidToken(@Param("token") String token);
 
-    @Modifying
-    @Transactional
-    @Query("DELETE FROM PasswordResetToken t WHERE t.user = :user")
-    void deleteByUser(@Param("user") UserAccount userAccount);
+  @Modifying
+  @Transactional
+  @Query("DELETE FROM PasswordResetToken t WHERE t.user = :user")
+  void deleteByUser(@Param("user") UserAccount userAccount);
 }

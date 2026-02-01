@@ -4,16 +4,15 @@ import java.time.LocalDate;
 import java.util.Set;
 
 public record TrailerResponse(
-        String title,
+    String title,
 
-        String description,
+    String description,
 
-        LocalDate releaseDate,
+    LocalDate releaseDate,
 
-        Set<String> genres,
+    Set<String> genres,
 
-        Double rating,
+    Double rating,
 
-        String videoUrl
-) {
+    String videoUrl) {
 }

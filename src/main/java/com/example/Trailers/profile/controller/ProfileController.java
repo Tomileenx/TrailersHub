@@ -15,44 +15,37 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 public class ProfileController {
 
-    private final ProfileService profileService;
+  private final ProfileService profileService;
 
-    @PostMapping("/user/create")
-    public ResponseEntity<String> createProfile(
-            @Valid @RequestBody ProfileRequest request,
-            @AuthenticationPrincipal UserAccount userAccount
-    ) {
-        profileService.createMyProfile(request, userAccount);
-        return ResponseEntity.ok(
-                "Profile successfully created"
-        );
-    }
+  @PostMapping("/user/create")
+  public ResponseEntity<String> createProfile(
+      @Valid @RequestBody ProfileRequest request,
+      @AuthenticationPrincipal UserAccount userAccount) {
+    profileService.createMyProfile(request, userAccount);
+    return ResponseEntity.ok(
+        "Profile successfully created");
+  }
 
-    @GetMapping("/user/profile")
-    public ProfileResponse getProfile(
-            @AuthenticationPrincipal UserAccount userAccount
-    ) {
-        return profileService.viewMyProfile(userAccount);
-    }
+  @GetMapping("/user/profile")
+  public ProfileResponse getProfile(
+      @AuthenticationPrincipal UserAccount userAccount) {
+    return profileService.viewMyProfile(userAccount);
+  }
 
-    @PutMapping("/user/update-profile")
-    public ResponseEntity<String> updateProfile(
-            @Valid @RequestBody ProfileUpdateRequest request,
-            @AuthenticationPrincipal UserAccount userAccount
-    ) {
-        profileService.updateMyProfile(request, userAccount);
-        return ResponseEntity.ok(
-                "Profile successfully updated"
-        );
-    }
+  @PutMapping("/user/update-profile")
+  public ResponseEntity<String> updateProfile(
+      @Valid @RequestBody ProfileUpdateRequest request,
+      @AuthenticationPrincipal UserAccount userAccount) {
+    profileService.updateMyProfile(request, userAccount);
+    return ResponseEntity.ok(
+        "Profile successfully updated");
+  }
 
-    @DeleteMapping("/user/delete-profile")
-    public ResponseEntity<String> deleteProfile(
-            @AuthenticationPrincipal UserAccount userAccount
-    ) {
-        profileService.deleteMyProfile(userAccount);
-        return ResponseEntity.ok(
-                "Profile successfully deleted"
-        );
-    }
+  @DeleteMapping("/user/delete-profile")
+  public ResponseEntity<String> deleteProfile(
+      @AuthenticationPrincipal UserAccount userAccount) {
+    profileService.deleteMyProfile(userAccount);
+    return ResponseEntity.ok(
+        "Profile successfully deleted");
+  }
 }

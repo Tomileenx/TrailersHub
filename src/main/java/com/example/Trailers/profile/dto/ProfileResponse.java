@@ -3,13 +3,13 @@ package com.example.Trailers.profile.dto;
 import java.util.Set;
 
 public record ProfileResponse(
-        String username,
+    String username,
 
-        String UserEmail,
+    String UserEmail,
 
-        Set<String> favouriteGenres,
+    Set<String> favouriteGenres,
 
-        String language
+    String language
 
 ) {
 }

@@ -18,36 +18,36 @@ import org.springframework.transaction.annotation.Transactional;
 @AllArgsConstructor
 @Transactional
 public class UserAccountService {
-    private final UserAccountRepo userAccountRepo;
-    private final AccountMapper accountMapper;
-    private final PasswordEncoder passwordEncoder;
-    private final JwtService jwtService;
-    private final AuthenticationManager authenticationManager;
+  private final UserAccountRepo userAccountRepo;
+  private final AccountMapper accountMapper;
+  private final PasswordEncoder passwordEncoder;
+  private final JwtService jwtService;
+  private final AuthenticationManager authenticationManager;
 
-    @PreAuthorize("hasAuthority('ROLE_USER')")
-    public void changePassword(UserAccount userAccount, String oldPassword, String newPassword) {
-        UserAccount user = userAccountRepo.findById(userAccount.getId())
-                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+  @PreAuthorize("hasAuthority('ROLE_USER')")
+  public void changePassword(UserAccount userAccount, String oldPassword, String newPassword) {
+    UserAccount user = userAccountRepo.findById(userAccount.getId())
+        .orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
-        if (!passwordEncoder.matches(oldPassword, user.getPassword())) {
-            throw new IllegalArgumentException("Old password is incorrect");
-        }
-
-        if (passwordEncoder.matches(newPassword, user.getPassword())) {
-            throw new IllegalArgumentException("New password must be different");
-        }
-
-        if (newPassword.length() < 8) {
-            throw new IllegalArgumentException("Password too short");
-        }
-
-        user.setPassword(passwordEncoder.encode(newPassword));
+    if (!passwordEncoder.matches(oldPassword, user.getPassword())) {
+      throw new IllegalArgumentException("Old password is incorrect");
     }
 
-    public void deleteMyAccount(UserAccount userAccount) {
-        UserAccount user = userAccountRepo.findById(userAccount.getId())
-                .orElseThrow(() -> new EntityNotFoundException("User not found"));
-
-        userAccountRepo.delete(user);
+    if (passwordEncoder.matches(newPassword, user.getPassword())) {
+      throw new IllegalArgumentException("New password must be different");
     }
+
+    if (newPassword.length() < 8) {
+      throw new IllegalArgumentException("Password too short");
+    }
+
+    user.setPassword(passwordEncoder.encode(newPassword));
+  }
+
+  public void deleteMyAccount(UserAccount userAccount) {
+    UserAccount user = userAccountRepo.findById(userAccount.getId())
+        .orElseThrow(() -> new EntityNotFoundException("User not found"));
+
+    userAccountRepo.delete(user);
+  }
 }
