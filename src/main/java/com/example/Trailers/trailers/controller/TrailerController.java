@@ -4,6 +4,7 @@ import com.example.Trailers.integration.service.TmdbImportService;
 import com.example.Trailers.trailers.dto.TrailerResponse;
 import com.example.Trailers.trailers.service.TrailerService;
 import com.example.Trailers.user.model.UserAccount;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -14,6 +15,7 @@ import java.util.Set;
 
 @RestController
 @AllArgsConstructor
+@SecurityRequirement(name = "bearerAuth")
 public class TrailerController {
     private final TmdbImportService tmdbImportService;
     private final TrailerService trailerService;

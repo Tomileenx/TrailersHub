@@ -1,5 +1,8 @@
 package com.example.Trailers.profile.service;
 
+import com.example.Trailers.exception.ProfileNotFoundException;
+import com.example.Trailers.exception.UserAlreadyExists;
+import com.example.Trailers.exception.UserNotFoundException;
 import com.example.Trailers.user.model.UserAccount;
 import com.example.Trailers.user.repo.UserAccountRepo;
 import com.example.Trailers.profile.dto.ProfileRequest;
@@ -24,6 +27,7 @@ public class ProfileService {
     private final ProfileMapper profileMapper;
     private final UserAccountRepo userAccountRepo;
 
+    @Transactional
     public void createMyProfile(
             ProfileRequest request,
             UserAccount userAccount
@@ -33,7 +37,7 @@ public class ProfileService {
         }
 
         if (userAccount.getUserProfile() != null) {
-            throw new EntityExistsException("User profile already exists.");
+            throw new UserAlreadyExists("User profile already exists.");
         }
 
         Profile profile = profileMapper.toProfile(request);
@@ -47,12 +51,12 @@ public class ProfileService {
     @Transactional(readOnly = true)
     public ProfileResponse viewMyProfile(UserAccount userAccount) {
         UserAccount user = userAccountRepo.findById(userAccount.getId())
-                .orElseThrow(() -> new EntityNotFoundException("User not found"));
+                .orElseThrow(() -> new UserNotFoundException("User not found"));
 
         Profile profile = user.getUserProfile();
 
         if (profile == null) {
-            throw new EntityNotFoundException("User profile not found");
+            throw new ProfileNotFoundException("User profile not found");
         }
 
         return profileMapper.toProfileResponse(profile);
@@ -64,12 +68,12 @@ public class ProfileService {
             UserAccount userAccount
     ) {
         UserAccount user = userAccountRepo.findById(userAccount.getId())
-                .orElseThrow(() -> new EntityNotFoundException("User not found"));
+                .orElseThrow(() -> new UserNotFoundException("User not found"));
 
         Profile profile = user.getUserProfile();
 
         if (profile == null) {
-            throw new EntityNotFoundException("Profile not found");
+            throw new ProfileNotFoundException("Profile not found");
         }
 
         if (request.username() != null) {
@@ -90,12 +94,12 @@ public class ProfileService {
     @Transactional
     public void deleteMyProfile(UserAccount userAccount) {
         UserAccount user = userAccountRepo.findById(userAccount.getId())
-                .orElseThrow(() -> new EntityNotFoundException("User not found"));
+                .orElseThrow(() -> new UserNotFoundException("User not found"));
 
         Profile profile = user.getUserProfile();
 
         if (profile == null) {
-            throw new EntityNotFoundException("Profile not found");
+            throw new ProfileNotFoundException("Profile not found");
         }
 
         user.setUserProfile(null);

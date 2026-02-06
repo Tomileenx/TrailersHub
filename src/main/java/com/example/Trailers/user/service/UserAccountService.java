@@ -1,5 +1,6 @@
 package com.example.Trailers.user.service;
 
+import com.example.Trailers.exception.UserNotFoundException;
 import com.example.Trailers.jwt.JwtService;
 import com.example.Trailers.user.mapper.AccountMapper;
 import com.example.Trailers.user.model.UserAccount;
@@ -25,9 +26,10 @@ public class UserAccountService {
     private final AuthenticationManager authenticationManager;
 
     @PreAuthorize("hasAuthority('ROLE_USER')")
+    @Transactional
     public void changePassword(UserAccount userAccount, String oldPassword, String newPassword) {
         UserAccount user = userAccountRepo.findById(userAccount.getId())
-                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+                .orElseThrow(() -> new UserNotFoundException("User not found"));
 
         if (!passwordEncoder.matches(oldPassword, user.getPassword())) {
             throw new IllegalArgumentException("Old password is incorrect");
@@ -44,9 +46,10 @@ public class UserAccountService {
         user.setPassword(passwordEncoder.encode(newPassword));
     }
 
+    @Transactional
     public void deleteMyAccount(UserAccount userAccount) {
         UserAccount user = userAccountRepo.findById(userAccount.getId())
-                .orElseThrow(() -> new EntityNotFoundException("User not found"));
+                .orElseThrow(() -> new UserNotFoundException("User not found"));
 
         userAccountRepo.delete(user);
     }

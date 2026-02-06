@@ -33,7 +33,6 @@ public class Profile {
    private String language;
 
     @OneToOne(
-            fetch = FetchType.LAZY,
             mappedBy = "userProfile"
     )
     private UserAccount userAccount;

@@ -1,5 +1,7 @@
 package com.example.Trailers.trailers.service;
 
+import com.example.Trailers.exception.TrailerNotFoundException;
+import com.example.Trailers.exception.UserNotFoundException;
 import com.example.Trailers.profile.mapper.ProfileMapper;
 import com.example.Trailers.trailers.mapper.TrailerMapper;
 import com.example.Trailers.trailers.model.Trailers;
@@ -30,7 +32,7 @@ public class TrailerService {
        List<Trailers> trailers = trailersRepo.findByTitleContainingIgnoreCase(title);
 
        if (trailers.isEmpty()) {
-           throw new EntityNotFoundException("No trailer found by that title");
+           throw new TrailerNotFoundException("No trailer found by that title");
        }
 
        String language = userAccount.getUserProfile().getLanguage();
@@ -50,7 +52,7 @@ public class TrailerService {
         List<Trailers> trailers = trailersRepo.findByGenresIn(genres);
 
         if (trailers.isEmpty()) {
-            throw new EntityNotFoundException("No trailers found by that genre");
+            throw new TrailerNotFoundException("No trailers found by that genre");
         }
 
         String language = userAccount.getUserProfile().getLanguage();
@@ -75,7 +77,7 @@ public class TrailerService {
         }
 
         if (trailers.isEmpty()) {
-            throw new EntityNotFoundException("No trailers found by the given date");
+            throw new TrailerNotFoundException("No trailers found by the given date");
         }
 
         String language = userAccount.getUserProfile().getLanguage();
@@ -92,7 +94,7 @@ public class TrailerService {
         List<Trailers> trailers = trailersRepo.findByRatingGreaterThanEqual(7.0);
 
         if (trailers.isEmpty()) {
-            throw new EntityNotFoundException("No trailers found by the specified rating");
+            throw new TrailerNotFoundException("No trailers found by the specified rating");
         }
 
         String language = userAccount.getUserProfile().getLanguage();
@@ -107,10 +109,10 @@ public class TrailerService {
     @Transactional
     public void saveTrailer(String title, UserAccount userAccount) {
         UserAccount user = userAccountRepo.findById(userAccount.getId())
-                .orElseThrow(() -> new EntityNotFoundException("User not found"));
+                .orElseThrow(() -> new UserNotFoundException("User not found"));
 
         Trailers trailer = trailersRepo.findByTitleIgnoreCase(title)
-                .orElseThrow(() -> new EntityNotFoundException("Trailer not found"));
+                .orElseThrow(() -> new TrailerNotFoundException("Trailer not found"));
 
         boolean alreadySaved = user.getSavedTrailers().stream()
                         .anyMatch(t -> t.getId().equals(trailer.getId()));
@@ -126,11 +128,11 @@ public class TrailerService {
     @Transactional
     public void unsaveTrailer(String title, UserAccount userAccount) {
         UserAccount user = userAccountRepo.findById(userAccount.getId())
-                .orElseThrow(() -> new EntityNotFoundException("User not found"));
+                .orElseThrow(() -> new UserNotFoundException("User not found"));
 
 
         Trailers trailer = trailersRepo.findByTitleIgnoreCase(title)
-                .orElseThrow(() -> new EntityNotFoundException("Trailer not found"));
+                .orElseThrow(() -> new TrailerNotFoundException("Trailer not found"));
 
         boolean removed = user.getSavedTrailers()
                 .removeIf(t -> t.getId().equals(trailer.getId()));
@@ -145,7 +147,7 @@ public class TrailerService {
     public List<TrailerResponse> getSavedTrailers(UserAccount userAccount) {
 
         UserAccount user = userAccountRepo.findById(userAccount.getId())
-                .orElseThrow(() -> new EntityNotFoundException("User not found"));
+                .orElseThrow(() -> new UserNotFoundException("User not found"));
 
 
         String language = user.getUserProfile().getLanguage();

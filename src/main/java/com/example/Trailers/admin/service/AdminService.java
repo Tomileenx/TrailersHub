@@ -4,13 +4,14 @@ import com.example.Trailers.admin.dto.AdminResponse;
 import com.example.Trailers.roles.Role;
 import com.example.Trailers.user.repo.UserAccountRepo;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class AdminService {
     private final UserAccountRepo userAccountRepo;
 

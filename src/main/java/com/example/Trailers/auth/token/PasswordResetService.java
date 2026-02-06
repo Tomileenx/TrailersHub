@@ -37,12 +37,12 @@ public class PasswordResetService {
        resetToken.setToken(token);
        resetToken.setUser(user);
        resetToken.setExpiresAt(
-               Instant.now().plus(15, ChronoUnit.HOURS)
+               Instant.now().plus(30, ChronoUnit.MINUTES)
        );
 
        passwordTokenRepo.save(resetToken);
 
-       emailService.send(
+       emailService.sendPasswordResetToken(
                user.getEmail(),
                "Password Reset",
                "Reset your password using this token: " + token

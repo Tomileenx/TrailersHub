@@ -1,31 +1,49 @@
+server:
+  forward-headers-strategy: framework
+
 jwt:
   secret: ${SECRET_KEY}
+
+admin:
+  email: "admin@example.com"
+  password: "Admin@123"
 
 tmdb:
   api:
     token: ${TMDB_TOKEN}
+
+
 spring:
   application:
     name: Trailers
-  mail:
-    host: smtp.gmail.com
-    port: 587
-    username: ${MAIL_NAME}
-    password: ${MAIL_PASS}
-    properties:
-      mail:
-        smtp:
-          auth: true
-          starttls:
-            enable: true
+
+  brevo:
+    sender-email: ${BREVO_SENDER_EMAIL}
+    api-key: ${BREVO_API_KEY}
+    sender-name: ${BREVO_SENDER_NAME}
+
+
+  #  mail:
+#    host: smtp.gmail.com
+#    port: 587
+#    username: ${MAIL_NAME}
+#    password: ${MAIL_PASS}
+#    properties:
+#      mail:
+#        smtp:
+#          auth: true
+#          starttls:
+#            enable: true
+
   datasource:
-    url: ${DB_URL}
+    url: jdbc:postgresql://localhost:5432/trailer_db
     username: ${DB_USERNAME}
     password: ${DB_PASSWORD}
     driver-class-name: org.postgresql.Driver
+
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: create
     show-sql: true
     properties:
       hibernate:

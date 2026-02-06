@@ -5,6 +5,7 @@ import com.example.Trailers.profile.dto.ProfileRequest;
 import com.example.Trailers.profile.dto.ProfileResponse;
 import com.example.Trailers.profile.service.ProfileService;
 import com.example.Trailers.profile.dto.ProfileUpdateRequest;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 @AllArgsConstructor
 @RestController
+@SecurityRequirement(name = "bearerAuth")
 public class ProfileController {
 
     private final ProfileService profileService;

@@ -2,14 +2,16 @@ package com.example.Trailers.admin.controller;
 
 import com.example.Trailers.admin.dto.AdminResponse;
 import com.example.Trailers.admin.service.AdminService;
-import lombok.AllArgsConstructor;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
 @RestController
-@AllArgsConstructor
+@RequiredArgsConstructor
+@SecurityRequirement(name = "bearerAuth")
 public class AdminController {
     private final AdminService adminService;
 

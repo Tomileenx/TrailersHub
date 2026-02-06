@@ -1,4 +1,4 @@
-package com.example.Trailers.integration.config;
+package com.example.Trailers.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -9,5 +9,12 @@ public class WebClientConfig {
     @Bean
     public WebClient.Builder webClientBuilder() {
         return WebClient.builder();
+    }
+
+    @Bean
+    public WebClient webClient(WebClient.Builder builder) {
+        return builder
+                .baseUrl("https://api.brevo.com/v3/smtp/email")
+                .build();
     }
 }

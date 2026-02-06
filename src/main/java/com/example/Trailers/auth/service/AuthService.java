@@ -9,6 +9,7 @@ import com.example.Trailers.exception.UserAlreadyExists;
 import com.example.Trailers.jwt.JwtService;
 import com.example.Trailers.roles.Role;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -17,7 +18,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class AuthService {
     private final UserAccountRepo userAccountRepo;
     private final AccountMapper accountMapper;
