@@ -1,8 +1,7 @@
 package com.example.Trailers.user.dto;
 
 public record ChangePasswordRequest(
-        String oldPassword,
+    String oldPassword,
 
-        String newPassword
-) {
+    String newPassword) {
 }

@@ -7,14 +7,9 @@ import jakarta.validation.constraints.Size;
 import java.util.Set;
 
 public record ProfileRequest(
-        @NotBlank
-        String username,
+    @NotBlank String username,
 
-        @NotNull
-        @Size(max = 3, message = "Maximum of three genres allowed")
-        Set<String> favouriteGenres,
+    @NotNull @Size(max = 3, message = "Maximum of three genres allowed") Set<String> favouriteGenres,
 
-        @NotNull
-        String language
-) {
+    @NotNull String language) {
 }

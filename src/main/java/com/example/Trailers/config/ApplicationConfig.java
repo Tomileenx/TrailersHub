@@ -18,42 +18,40 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @RequiredArgsConstructor
 public class ApplicationConfig {
 
-    private final UserAccountRepo userAccountRepo;
+  private final UserAccountRepo userAccountRepo;
 
-    @Bean
-    public UserDetailsService userDetailsService() {
-        return username -> userAccountRepo.findUsersByEmail(username)
-                .orElseThrow(() -> new UsernameNotFoundException("Email not found"));
-    }
+  @Bean
+  public UserDetailsService userDetailsService() {
+    return username -> userAccountRepo.findUsersByEmail(username)
+        .orElseThrow(() -> new UsernameNotFoundException("Email not found"));
+  }
 
-    @Bean
-    public AuthenticationManager authenticationManager(
-            AuthenticationConfiguration configuration
-    ) {
-        return configuration.getAuthenticationManager();
-    }
+  @Bean
+  public AuthenticationManager authenticationManager(
+      AuthenticationConfiguration configuration) {
+    return configuration.getAuthenticationManager();
+  }
 
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
+  @Bean
+  public PasswordEncoder passwordEncoder() {
+    return new BCryptPasswordEncoder();
+  }
 
-    @Bean
-    public CommandLineRunner commandLineRunner(
-            UserAccountRepo userAccountRepo,
-            PasswordEncoder passwordEncoder
-    ) {
-        return args -> {
-            if (userAccountRepo.findUsersByEmail("admin@example.com").isEmpty()) {
-                UserAccount admin = new UserAccount();
-                admin.setEmail("admin@example.com");
-                admin.setPassword(passwordEncoder.encode("Admin@123"));
-                admin.setRole(Role.ROLE_ADMIN);
+  @Bean
+  public CommandLineRunner commandLineRunner(
+      UserAccountRepo userAccountRepo,
+      PasswordEncoder passwordEncoder) {
+    return args -> {
+      if (userAccountRepo.findUsersByEmail("admin@example.com").isEmpty()) {
+        UserAccount admin = new UserAccount();
+        admin.setEmail("admin@example.com");
+        admin.setPassword(passwordEncoder.encode("Admin@123"));
+        admin.setRole(Role.ROLE_ADMIN);
 
-                userAccountRepo.save(admin);
+        userAccountRepo.save(admin);
 
-                System.out.println("Admin user created: admin@example.com, Admin@123");
-            }
-        };
-    }
+        System.out.println("Admin user created: admin@example.com, Admin@123");
+      }
+    };
+  }
 }

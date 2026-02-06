@@ -19,40 +19,34 @@ import java.util.Set;
 @Getter
 @Setter
 public class Trailers {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
 
-    @Column(nullable = false, unique = true)
-    private Long tmdbId;
+  @Column(nullable = false, unique = true)
+  private Long tmdbId;
 
-    @Column(
-            unique = true,
-            nullable = false
-    )
-    private String title;
+  @Column(unique = true, nullable = false)
+  private String title;
 
-    @Column(length = 1000)
-    private String description;
+  @Column(length = 1000)
+  private String description;
 
-    @Column(nullable = false)
-    private String videoUrl;
+  @Column(nullable = false)
+  private String videoUrl;
 
-    @ElementCollection
-    @CollectionTable(
-            name = "trailer_genres",
-            joinColumns = @JoinColumn(name = "trailer_id")
-    )
-    @Column(name = "genre")
-    private Set<String> genres = new HashSet<>();
+  @ElementCollection
+  @CollectionTable(name = "trailer_genres", joinColumns = @JoinColumn(name = "trailer_id"))
+  @Column(name = "genre")
+  private Set<String> genres = new HashSet<>();
 
-    private Double rating;
+  private Double rating;
 
-    private LocalDate releaseDate;
+  private LocalDate releaseDate;
 
-    @CreationTimestamp
-    private LocalDateTime createdAt;
+  @CreationTimestamp
+  private LocalDateTime createdAt;
 
-    @ManyToMany(mappedBy = "savedTrailers")
-    private Set<UserAccount> usersSavedTrailers = new HashSet<>();
+  @ManyToMany(mappedBy = "savedTrailers")
+  private Set<UserAccount> usersSavedTrailers = new HashSet<>();
 }

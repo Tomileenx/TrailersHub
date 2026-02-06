@@ -13,20 +13,17 @@ import java.time.Instant;
 @Setter
 public class PasswordResetToken {
 
-    @Id
-    @GeneratedValue
-    private Long id;
+  @Id
+  @GeneratedValue
+  private Long id;
 
-    @Column(
-            nullable = false,
-            unique = true
-    )
-    private String token;
+  @Column(nullable = false, unique = true)
+  private String token;
 
-    @OneToOne
-    @JoinColumn(name = "user_id", nullable = false)
-    private UserAccount user;
+  @OneToOne
+  @JoinColumn(name = "user_id", nullable = false)
+  private UserAccount user;
 
-    @Column(nullable = false)
-    private Instant expiresAt;
+  @Column(nullable = false)
+  private Instant expiresAt;
 }

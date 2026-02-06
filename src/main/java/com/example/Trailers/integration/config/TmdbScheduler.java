@@ -10,11 +10,12 @@ import org.springframework.stereotype.Component;
 @Component
 @AllArgsConstructor
 public class TmdbScheduler {
-    private final TmdbImportService tmdbImportService;
+  private final TmdbImportService tmdbImportService;
 
-    @Scheduled(cron = "0 0 3 * * MON")
-    public void syncTrendingMovies() {
-        log.info("Running weekly TMDB import");
-        tmdbImportService.importTrendingMoviesMax3pages();
-    }
+  @Scheduled(cron = "0 0 3 * * MON")
+  public void syncTrendingMovies() {
+    log.info("Running weekly TMDB import");
+    // tmdbImportService.importTrendingMoviesMax3pages();
+    tmdbImportService.importTrendingMovies();
+  }
 }
