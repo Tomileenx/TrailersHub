@@ -12,7 +12,9 @@ import java.util.Set;
 public interface TrailersRepo extends JpaRepository<Trailers, Long> {
   Optional<Trailers> findByTmdbId(Long id);
 
-  List<Trailers> findByTitleContainingIgnoreCase(String title);
+  Optional<Trailers> findByTitleContainingIgnoreCase(String title);
+
+  List<Trailers> findByTitleIgnoreCase(String title);
 
   @Query("""
             SELECT DISTINCT t FROM Trailers t
@@ -34,7 +36,9 @@ public interface TrailersRepo extends JpaRepository<Trailers, Long> {
       """)
   List<Trailers> findByReleaseYearAndMonth(
       @Param("year") int year,
-      @Param("month") int month);
+      @Param("month") int month
+  );
+
 
   List<Trailers> findByRatingGreaterThanEqual(Double rating);
 
