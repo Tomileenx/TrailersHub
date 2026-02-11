@@ -29,7 +29,7 @@ public class TrailerService {
     @PreAuthorize("hasAuthority('ROLE_USER')")
     @Transactional(readOnly = true)
     public List<TrailerResponse> viewTrailersByTitle(String title, UserAccount userAccount) {
-       List<Trailers> trailers = trailersRepo.findByTitleContainingIgnoreCase(title);
+       List<Trailers> trailers = trailersRepo.findByTitleIgnoreCase(title);
 
        if (trailers.isEmpty()) {
            throw new TrailerNotFoundException("No trailer found by that title");
@@ -111,7 +111,7 @@ public class TrailerService {
         UserAccount user = userAccountRepo.findById(userAccount.getId())
                 .orElseThrow(() -> new UserNotFoundException("User not found"));
 
-        Trailers trailer = trailersRepo.findByTitleIgnoreCase(title)
+        Trailers trailer = trailersRepo.findByTitleContainingIgnoreCase(title)
                 .orElseThrow(() -> new TrailerNotFoundException("Trailer not found"));
 
         boolean alreadySaved = user.getSavedTrailers().stream()
@@ -131,7 +131,7 @@ public class TrailerService {
                 .orElseThrow(() -> new UserNotFoundException("User not found"));
 
 
-        Trailers trailer = trailersRepo.findByTitleIgnoreCase(title)
+        Trailers trailer = trailersRepo.findByTitleContainingIgnoreCase(title)
                 .orElseThrow(() -> new TrailerNotFoundException("Trailer not found"));
 
         boolean removed = user.getSavedTrailers()
