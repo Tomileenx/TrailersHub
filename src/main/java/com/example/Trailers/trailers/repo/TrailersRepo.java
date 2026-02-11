@@ -12,7 +12,9 @@ import java.util.Set;
 public interface TrailersRepo extends JpaRepository<Trailers, Long> {
   Optional<Trailers> findByTmdbId(Long id);
 
-  List<Trailers> findByTitleContainingIgnoreCase(String title);
+  Optional<Trailers> findByTitleContainingIgnoreCase(String title);
+
+  List<Trailers> findByTitleIgnoreCase(String title);
 
   @Query("""
             SELECT DISTINCT t FROM Trailers t
