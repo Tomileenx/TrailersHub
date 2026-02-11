@@ -48,18 +48,18 @@ public class TrailerController {
 
   @PostMapping("/user/trailer/save")
   public ResponseEntity<String> saveTrailer(
-      @RequestParam Long tmdbId,
+      @RequestParam String title
       @AuthenticationPrincipal UserAccount userAccount) {
-    trailerService.saveTrailer(tmdbId, userAccount);
+    trailerService.saveTrailer(title, userAccount);
     return ResponseEntity.ok(
         "Trailer successfully saved");
   }
 
   @DeleteMapping("/user/trailer/unsave")
   public ResponseEntity<String> unSaveTrailer(
-      @RequestParam Long tmdbId,
+      @RequestParam String title,
       @AuthenticationPrincipal UserAccount userAccount) {
-    trailerService.unsaveTrailer(tmdbId, userAccount);
+    trailerService.unsaveTrailer(title, userAccount);
     return ResponseEntity.ok(
         "Trailer successfully unsaved");
   }
