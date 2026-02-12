@@ -48,7 +48,7 @@ public class TrailerController {
 
   @PostMapping("/user/trailer/save")
   public ResponseEntity<String> saveTrailer(
-      @RequestParam String title
+      @RequestParam String title,
       @AuthenticationPrincipal UserAccount userAccount) {
     trailerService.saveTrailer(title, userAccount);
     return ResponseEntity.ok(
