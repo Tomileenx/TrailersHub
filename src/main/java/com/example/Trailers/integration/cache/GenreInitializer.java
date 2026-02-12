@@ -14,11 +14,19 @@ public class GenreInitializer {
 
   @PostConstruct
   public void init() {
-    if (!genreCache.isEmpty())
-      return;
+    if (!genreCache.isEmpty()) return;
 
-    GenreResponse response = tmdbClient.getGenres();
-    response.genres().forEach(
-        g -> genreCache.put(g.id(), g.name()));
+    try {
+      GenreResponse response = tmdbClient.getGenres();
+
+      if (response != null && response.genres() != null) {
+        response.genres().forEach(
+                g -> genreCache.put(g.id(), g.name())
+        );
+      }
+
+    } catch (Exception e) {
+      System.err.println("Genre initialization failed, continuing startup.");
+    }
   }
 }
