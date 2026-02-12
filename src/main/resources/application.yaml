@@ -12,7 +12,6 @@ tmdb:
   api:
     token: ${TMDB_TOKEN}
 
-
 spring:
   application:
     name: Trailers
@@ -22,28 +21,15 @@ spring:
     api-key: ${BREVO_API_KEY}
     sender-name: ${BREVO_SENDER_NAME}
 
-
-  #  mail:
-#    host: smtp.gmail.com
-#    port: 587
-#    username: ${MAIL_NAME}
-#    password: ${MAIL_PASS}
-#    properties:
-#      mail:
-#        smtp:
-#          auth: true
-#          starttls:
-#            enable: true
-
   datasource:
-    url: jdbc:postgresql://localhost:5432/trailer_db
-    username: ${DB_USERNAME}
-    password: ${DB_PASSWORD}
+    url: ${SPRING_DATASOURCE_URL}
+    username: ${SPRING_DATASOURCE_USERNAME}
+    password: ${SPRING_DATASOURCE_PASSWORD}
     driver-class-name: org.postgresql.Driver
 
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
     show-sql: true
     properties:
       hibernate:

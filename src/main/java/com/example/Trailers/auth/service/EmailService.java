@@ -40,7 +40,7 @@ public class EmailService {
                                 "name", brevoProperties.getSenderName(),
                                 "email", brevoProperties.getSenderEmail()
                         ),
-                        "to", new Map[]{Map.of("email", to)},
+                        "to", List.of(Map.of("email", to)),
                         "subject", subject,
                         "textContent", body
                 ))
