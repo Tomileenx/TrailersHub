@@ -20,13 +20,6 @@ public class EmailService {
 
     private final BrevoProperties brevoProperties;
 
-    @PostConstruct
-    public void init() {
-        System.out.println("Brevo API Key: " + brevoProperties.getApiKey());
-        System.out.println("Sender Email: " + brevoProperties.getSenderEmail());
-        System.out.println("Sender Name: " + brevoProperties.getSenderName());
-    }
-
     public void sendPasswordResetToken(String to, String subject, String body) {
         Objects.requireNonNull(to, "Recipient email cannot be null");
         Objects.requireNonNull(brevoProperties.getSenderEmail(), "Sender email cannot be null");
