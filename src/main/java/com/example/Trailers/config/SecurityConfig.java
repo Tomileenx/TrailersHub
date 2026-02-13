@@ -41,7 +41,8 @@ public class SecurityConfig {
                                 "/account/forgot-password",
                                 "/account/reset-password",
                                 "/swagger-ui/**",
-                                "/v3/api-docs/**"
+                                "/v3/api-docs/**",
+                                "/health"
                         ).permitAll()
                         .requestMatchers("/admin/**").hasRole("ADMIN")
                         .requestMatchers("/user/**").authenticated()
